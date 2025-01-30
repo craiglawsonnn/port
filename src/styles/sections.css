@@ -1,0 +1,22 @@
+body {
+    margin: 0;
+    padding: 0;
+    scroll-behavior: smooth;
+    overflow-y: auto;
+  }
+  
+  main {
+    position: relative;
+  }
+  
+  .section {
+    height: 100vh; /* Full screen height */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    background: #1e1e1e; /* Base background color */
+    color: white;
+    text-align: center;
+  }
+  

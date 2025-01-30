@@ -1,0 +1,21 @@
+#home {
+    position: relative;
+    height: 100vh;
+    overflow: hidden; /* Ensure no scrollbars appear */
+  }
+  
+  #home h1 {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    font-size: 3rem;
+    margin: 0;
+  }
+  
+  #home p {
+    font-style: italic;
+    color: #cccccc;
+    font-size: 1.2rem;
+    margin: 10px 0;
+  }
+  
