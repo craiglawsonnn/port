@@ -1,28 +1,33 @@
 .experience-section {
     position: relative;
     height: 100vh;
-    overflow-y: scroll;
     background-color: #1e1e1e;
     display: flex;
     justify-content: center;
     align-items: center;
+    padding-left: 200px; /* Add padding for navbar */
+    overflow: hidden; /* Prevent unwanted scrolling */
   }
   
   .experience-cards {
-    position: relative;
     width: 100%;
     max-width: 800px;
-    height: 100%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between cards */
   }
   
   .experience-card {
-    position: absolute;
+    position: relative;
     width: 100%;
     background-color: #2c2c2c;
     border-radius: 15px;
     padding: 20px;
     box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.4);
-    transition: all 0.5s ease;
+    transition: filter 0.5s ease, opacity 0.5s ease;
+    mask-image: radial-gradient(circle, rgba(0, 0, 0, 1) 60%, rgba(0, 0, 0, 0) 100%);
+    mask-size: cover;
   }
   
   .card-content h2 {

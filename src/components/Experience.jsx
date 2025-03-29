@@ -13,12 +13,10 @@ function Experience() {
       const nextCard = cardsRef.current[index + 1];
       const prevCard = cardsRef.current[index - 1];
 
+      // Apply the gradient blur effect dynamically
       gsap.set(card, {
-        y: index === 0 ? 0 : index === 1 ? "10vh" : "150vh",
-        x: index === 1 ? "10vw" : 0,
-        scale: index === 0 ? 1 : 0.8,
         opacity: index === 0 ? 1 : 0.5,
-        filter: index === 0 ? "blur(0px)" : "blur(10px)",
+        filter: index === 0 ? "blur(0px)" : "blur(15px)",
       });
 
       ScrollTrigger.create({
@@ -27,63 +25,39 @@ function Experience() {
         end: "center 30%",
         scrub: true,
         onEnter: () => {
-          if (nextCard) {
-            gsap.to(nextCard, {
-              y: "10vh",
-              x: "10vw",
-              opacity: 0.5,
-              scale: 0.8,
-              filter: "blur(10px)",
-            });
-          }
           gsap.to(card, {
-            y: 0,
-            x: 0,
             opacity: 1,
-            scale: 1,
             filter: "blur(0px)",
           });
+          if (nextCard) {
+            gsap.to(nextCard, {
+              opacity: 0.5,
+              filter: "blur(15px)",
+            });
+          }
         },
         onLeave: () => {
           gsap.to(card, {
-            y: "-10vh",
-            x: "-10vw",
             opacity: 0.5,
-            scale: 0.8,
-            filter: "blur(10px)",
+            filter: "blur(15px)",
           });
         },
         onEnterBack: () => {
           gsap.to(card, {
-            y: 0,
-            x: 0,
             opacity: 1,
-            scale: 1,
             filter: "blur(0px)",
           });
           if (prevCard) {
             gsap.to(prevCard, {
-              y: "-10vh",
-              x: "-10vw",
               opacity: 0.5,
-              scale: 0.8,
-              filter: "blur(10px)",
+              filter: "blur(15px)",
             });
           }
         },
         onLeaveBack: () => {
-          if (prevCard) {
-            gsap.to(prevCard, {
-              y: "10vh",
-              x: "10vw",
-              opacity: 0.5,
-              scale: 0.8,
-              filter: "blur(10px)",
-            });
-          }
           gsap.to(card, {
-            y: "150vh",
-            opacity: 0,
+            opacity: 0.5,
+            filter: "blur(15px)",
           });
         },
       });

@@ -1,22 +1,18 @@
-body {
-    margin: 0;
-    padding: 0;
-    scroll-behavior: smooth;
-    overflow-y: auto;
-  }
-  
-  main {
-    position: relative;
-  }
-  
-  .section {
-    height: 100vh; /* Full screen height */
+/* Ensure sections fit within the viewport */
+.section {
+    width: calc(100vw - 200px); /* Subtract navbar width from full viewport */
+    overflow-x: hidden; /* Prevent horizontal scroll on sections */
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 2rem;
-    background: #1e1e1e; /* Base background color */
-    color: white;
-    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+  }
+  
+  /* Prevent resizing effects */
+  .section h1, .section p {
+    margin: 0;
+    text-align: left;
   }
   

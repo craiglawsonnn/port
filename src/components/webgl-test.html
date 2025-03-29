@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL2 Test</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; width: 100vw; height: 100vh; }
+    </style>
+</head>
+<body>
+    <canvas id="webglCanvas"></canvas>
+    <script>
+        function initWebGL() {
+            const canvas = document.getElementById("webglCanvas");
+            const gl = canvas.getContext("webgl2") || canvas.getContext("webgl");
+
+            if (!gl) {
+                console.error("WebGL is NOT supported!");
+                document.body.innerHTML = "<h1 style='color: red;'>WebGL NOT Supported</h1>";
+                return;
+            }
+
+            console.log("WebGL Context Created:", gl.getParameter(gl.VERSION));
+
+            // Set up viewport
+            gl.viewport(0, 0, canvas.width, canvas.height);
+            gl.clearColor(1.0, 0.0, 0.0, 1.0); // Set clear color to RED
+            gl.clear(gl.COLOR_BUFFER_BIT); // Fill the screen with red
+        }
+
+        window.onload = initWebGL;
+    </script>
+</body>
+</html>

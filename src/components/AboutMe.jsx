@@ -1,57 +1,35 @@
 import React, { Suspense } from "react";
+import { Canvas } from "@react-three/fiber";
 import AboutModel from "./AboutModel";
 
 function AboutMe() {
   return (
-    <div style={{ display: "flex", height: "100vh", alignItems: "center", padding: "20px" }}>
-      {/* 3D Model Container */}
-      <div
-        style={{
-          flex: 1,
-          position: "fixed",
-          top: "15%", // Adjusted to provide more padding
-          left: "5%", // Added padding
-          width: "350px", // Wider container
-          height: "400px", // Taller container
-          border: "1px solid #ccc",
-          borderRadius: "10px",
-          backgroundColor: "#1a1a1a",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Suspense fallback={<div>Loading 3D Model...</div>}>
+    <div id="about" style={{ height: "100vh", width: "100%", position: "relative" }}>
+      <Suspense fallback={<div>Loading...</div>}>
+        <Canvas
+          style={{ height: "100vh", width: "100vw", background: "black" }}
+          camera={{ position: [0, 5, 10], fov: 50 }}
+        >
+          <ambientLight intensity={0.5} />
+          <directionalLight position={[5, 10, 5]} intensity={1} />
           <AboutModel />
-        </Suspense>
-        {/* Buttons for interaction */}
-        <div style={{ marginTop: "10px" }}>
-          <button style={{ margin: "5px" }} onClick={() => console.log("Action 1")}>
-            Action 1
-          </button>
-          <button style={{ margin: "5px" }} onClick={() => console.log("Action 2")}>
-            Action 2
-          </button>
-          <button style={{ margin: "5px" }} onClick={() => console.log("Action 3")}>
-            Action 3
-          </button>
-        </div>
-      </div>
-
-      {/* About Text */}
+        </Canvas>
+      </Suspense>
       <div
         style={{
-          flex: 2,
-          marginLeft: "400px", // Space for the fixed model container
+          position: "absolute",
+          top: "10%",
+          left: "10%",
+          color: "white",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
           padding: "20px",
-          textAlign: "left",
+          borderRadius: "8px",
         }}
       >
-        <h1>Craig Lawson</h1>
+        <h1>About Me</h1>
         <p>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sit amet augue id
-          metus vehicula vehicula sit amet nec metus.
+          Hi, I'm [Your Name]! A passionate developer with a love for 3D
+          rendering, gaming, and creating interactive experiences.
         </p>
       </div>
     </div>

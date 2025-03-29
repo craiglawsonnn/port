@@ -1,12 +1,12 @@
 import React, { useRef, useEffect, useState } from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { gsap } from "gsap";
+import { BrowserRouter } from "react-router-dom";
 import NavigationBar from "./components/NavigationBar";
 import Home from "./components/Home";
 import Experience from "./components/Experience";
 import Projects from "./components/Projects";
-import AboutMe from "./components/AboutMe";
+import AboutMe from "./components/AboutMeCard";
 import Contact from "./components/Contact";
+import FloatingCVButton from "./components/FloatingCVButton";
 import "./App.css";
 
 function App() {
@@ -14,29 +14,31 @@ function App() {
 
   useEffect(() => {
     const sections = document.querySelectorAll(".section");
+  
     const observer = new IntersectionObserver(
       (entries) => {
+        let visibleEntry = null;
+  
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
-            gsap.to(`#${entry.target.id}`, {
-              scale: 1.1,
-              duration: 0.5,
-            });
-          } else {
-            gsap.to(`#${entry.target.id}`, {
-              scale: 1,
-              duration: 0.5,
-            });
+          if (entry.isIntersecting && entry.intersectionRatio >= 0.5) {
+            visibleEntry = entry;
           }
         });
+  
+        if (visibleEntry) {
+          setActiveSection(visibleEntry.target.id);
+        }
       },
-      { threshold: 0.5 } // Trigger when 50% of the section is visible
+      {
+        threshold: [0.5],
+        rootMargin: "0px 0px -20% 0px", // triggers sooner on scroll
+      }
     );
-
+  
     sections.forEach((section) => observer.observe(section));
     return () => observer.disconnect();
   }, []);
+  
   const homeRef = useRef(null);
   const experienceRef = useRef(null);
   const projectsRef = useRef(null);
@@ -45,36 +47,38 @@ function App() {
 
   const scrollToSection = (sectionRef) => {
     if (sectionRef && sectionRef.current) {
-      sectionRef.current.scrollIntoView({ behavior: "smooth" });
+      sectionRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+
     }
   };
 
   return (
-    <Router>
+    <BrowserRouter>
       <div>
-        <NavigationBar
-          onNavigate={(section) => {
-            switch (section) {
-              case "home":
-                scrollToSection(homeRef);
-                break;
-              case "experience":
-                scrollToSection(experienceRef);
-                break;
-              case "projects":
-                scrollToSection(projectsRef);
-                break;
-              case "about":
-                scrollToSection(aboutRef);
-                break;
-              case "contact":
-                scrollToSection(contactRef);
-                break;
-              default:
-                break;
-            }
-          }}
-        />
+      <NavigationBar
+  activeSection={activeSection}
+  onNavigate={(section) => {
+    switch (section) {
+      case "home":
+        scrollToSection(homeRef);
+        break;
+      case "experience":
+        scrollToSection(experienceRef);
+        break;
+      case "projects":
+        scrollToSection(projectsRef);
+        break;
+      case "about":
+        scrollToSection(aboutRef);
+        break;
+      case "contact":
+        scrollToSection(contactRef);
+        break;
+      default:
+        break;
+    }
+  }}
+/>
         <div id="app-container">
           <div id="home" className="section" ref={homeRef}>
             <Home />
@@ -85,7 +89,7 @@ function App() {
           <div id="projects" className="section" ref={projectsRef}>
             <Projects />
           </div>
-          <div id="about" className="section" ref={aboutRef}>
+          <div id="about" className="section about-section" ref={aboutRef}>
             <AboutMe />
           </div>
           <div id="contact" className="section" ref={contactRef}>
@@ -93,7 +97,7 @@ function App() {
           </div>
         </div>
       </div>
-    </Router>
+    </BrowserRouter>
   );
 }
 

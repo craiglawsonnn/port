@@ -4,24 +4,16 @@ import "../styles/Home.css";
 
 function Home() {
   return (
-    <div id="home" style={{ position: "relative", height: "100vh" }}>
+    <section id="home" className="section">
+      {/* The WebGL Canvas */}
       <ParticleEffect />
-      <div
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          transform: "translate(-50%, -50%)",
-          textAlign: "center",
-          color: "white",
-        }}
-      >
-        <h1 style={{ fontSize: "3rem", margin: 0 }}>PARTICLE LOVE</h1>
-        <p style={{ fontSize: "1.2rem", margin: "10px 0" }}>
-          By Craig Lawson
-        </p>
+
+      {/* The text that will act as a MASK */}
+      <div className="title">
+        <h1>CRAIG LAWSON'S</h1>
+        <h1>PORTFOLIO</h1>
       </div>
-    </div>
+    </section>
   );
 }
 

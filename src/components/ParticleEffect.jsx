@@ -1,96 +1,112 @@
-import React, { useRef, useState } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { TextureLoader } from "three";
+import * as THREE from "three";
+import { useEffect, useRef } from "react";
 
-function Particles() {
-  const particlesRef = useRef([]);
-  const [velocities] = useState(
-    Array.from({ length: 500 }, () => ({
-      x: (Math.random() - 0.5) * 0.002,
-      y: (Math.random() - 0.5) * 0.002,
-    }))
-  );
-  const center = [0, 0, 0];
-  const gravityStrength = 0.001;
-  const texture = new TextureLoader().load("/circleTexture.png");
+const ParticleEffect = () => {
+    const mountRef = useRef(null);
 
-  useFrame(({ mouse }) => {
-    const mouseX = mouse.x * 5;
-    const mouseY = mouse.y * 5;
+    useEffect(() => {
+        // Scene Setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(
+            75,
+            window.innerWidth / window.innerHeight,
+            0.1,
+            1000
+        );
+        camera.position.z = 5;
 
-    particlesRef.current.forEach((particle, index) => {
-      if (particle) {
-        const dx = center[0] - particle.position.x;
-        const dy = center[1] - particle.position.y;
-        const distanceToCenter = Math.sqrt(dx * dx + dy * dy);
+        // Renderer
+        const renderer = new THREE.WebGLRenderer({ alpha: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        mountRef.current.appendChild(renderer.domElement);
 
-        const mouseDx = particle.position.x - mouseX;
-        const mouseDy = particle.position.y - mouseY;
-        const mouseDistance = Math.sqrt(mouseDx * mouseDx + mouseDy * mouseDy);
+        // Responsive Particle Grid
+        const cols = Math.floor(window.innerWidth / 25); // Increase density
+        const rows = Math.floor(window.innerHeight / 25);
+        const spacing = 0.6; // Space between particles
+        const particleCount = cols * rows;
 
-        if (mouseDistance < 0.5) {
-          velocities[index].x += mouseDx * 0.025;
-          velocities[index].y += mouseDy * 0.025;
+        const particles = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const offsets = new Float32Array(particleCount); // Used for wave effect
+
+        let index = 0;
+        for (let y = 0; y < rows; y++) {
+            for (let x = 0; x < cols; x++) {
+                positions[index * 3] = (x - cols / 2) * spacing;
+                positions[index * 3 + 1] = (y - rows / 2) * spacing;
+                positions[index * 3 + 2] = 0;
+
+                // Offset controls timing - make a diagonal wave
+                offsets[index] = (x + y) * 0.5; 
+                index++;
+            }
         }
 
-        if (distanceToCenter > 0.1) {
-          const force = gravityStrength / distanceToCenter;
-          velocities[index].x += force * dx;
-          velocities[index].y += force * dy;
-        }
+        particles.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+        particles.setAttribute("offset", new THREE.BufferAttribute(offsets, 1));
 
-        particle.position.x += velocities[index].x;
-        particle.position.y += velocities[index].y;
+        // Shader Material with a Soft Spread Wave Effect
+        const particleMaterial = new THREE.ShaderMaterial({
+            vertexShader: `
+                attribute float offset;
+                varying float vOpacity;
+                uniform float time;
 
-        particle.material.opacity = Math.min(1, particle.material.opacity * 1.05); // Recover opacity
-        particle.material.needsUpdate = true;
+                void main() {
+                    vec3 newPosition = position;
 
-        velocities[index].x *= 0.98;
-        velocities[index].y *= 0.98;
-      }
-    });
-  });
+                    // Wave moves diagonally, smoother fade across multiple rows
+                    float wave = sin(time * 0.5 + offset * 1.2) * 0.5 + 0.5;
+                    
+                    // Gaussian-style wave spread to neighboring particles
+                    float spread = smoothstep(0.2, 0.8, wave) * 0.9;
 
-  const particles = Array.from({ length: 500 }, () => ({
-    position: [
-      (Math.random() - 0.5) * 10,
-      (Math.random() - 0.5) * 10,
-      0,
-    ],
-    size: Math.random() * 0.3 + 0.1, // Larger particles
-  }));
+                    vOpacity = spread; // Smooth opacity transition
 
-  return (
-    <group>
-      {particles.map((particle, index) => (
-        <mesh
-          key={index}
-          position={particle.position}
-          ref={(el) => (particlesRef.current[index] = el)}
-        >
-          <planeGeometry args={[particle.size, particle.size]} />
-          <meshStandardMaterial
-            map={texture} // Apply rounded texture
-            transparent
-            opacity={0.8}
-            emissive="#ffffff"
-            emissiveIntensity={0.4}
-          />
-        </mesh>
-      ))}
-    </group>
-  );
-}
+                    gl_PointSize = 5.0;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
+                }
+            `,
+            fragmentShader: `
+                varying float vOpacity;
+                void main() {
+                    gl_FragColor = vec4(1.0, 0.5, 0.8, vOpacity);
+                }
+            `,
+            uniforms: {
+                time: { value: 0 }
+            },
+            transparent: true
+        });
 
-export default function ParticleEffect() {
-  return (
-    <Canvas
-      style={{ height: "100vh", background: "black", position: "absolute", zIndex: 1 }}
-      camera={{ position: [0, 0, 15] }} // Move camera back
-    >
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={1} />
-      <Particles />
-    </Canvas>
-  );
-}
+        const particleSystem = new THREE.Points(particles, particleMaterial);
+        scene.add(particleSystem);
+
+        // Animation Loop
+        let clock = new THREE.Clock();
+        const animate = () => {
+            requestAnimationFrame(animate);
+            particleMaterial.uniforms.time.value = clock.getElapsedTime();
+            renderer.render(scene, camera);
+        };
+        animate();
+
+        // Handle Resizing
+        const handleResize = () => {
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+        };
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            mountRef.current.removeChild(renderer.domElement);
+            window.removeEventListener("resize", handleResize);
+        };
+    }, []);
+
+    return <div ref={mountRef} style={{ position: "absolute", top: 0, left: 0, width: "100vw", height: "100vh" }} />;
+};
+
+export default ParticleEffect;

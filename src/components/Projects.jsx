@@ -1,63 +1,70 @@
-import React, { useState } from "react";
-import "../styles/Projects.css";
+import React, { useRef, useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { Physics, RigidBody, BallCollider } from "@react-three/rapier";
+// import { Html } from "@react-three/drei";
+import * as THREE from "three";
 
 const projectData = [
   { id: 1, title: "Project 1", description: "Description of Project 1" },
   { id: 2, title: "Project 2", description: "Description of Project 2" },
   { id: 3, title: "Project 3", description: "Description of Project 3" },
-  // Add more projects as needed
 ];
 
-function Projects() {
-  const [currentIndex, setCurrentIndex] = useState(0);
+function HangingCard({ position, project }) {
+  const cardRef = useRef();
+  const [flipped, setFlipped] = useState(false);
 
-  const handleNext = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === projectData.length - 1 ? 0 : prevIndex + 1
-    );
-  };
-
-  const handlePrevious = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? projectData.length - 1 : prevIndex - 1
-    );
+  const handleFlip = () => {
+    setFlipped(!flipped);
   };
 
   return (
-    <div className="projects-container">
-      <h1>Projects</h1>
-      <div className="carousel">
-        <button className="prev-button" onClick={handlePrevious}>
-          Previous
-        </button>
-        <div className="carousel-inner">
-          {projectData.map((project, index) => (
-            <div
-              className={`carousel-item ${
-                index === currentIndex ? "active" : ""
-              }`}
-              key={project.id}
-            >
-              <h2>{project.title}</h2>
-              <p>{project.description}</p>
-            </div>
-          ))}
-        </div>
-        <button className="next-button" onClick={handleNext}>
-          Next
-        </button>
-      </div>
-      <div className="pagination">
-        {projectData.map((_, index) => (
-          <span
-            key={index}
-            className={`dot ${index === currentIndex ? "active" : ""}`}
-            onClick={() => setCurrentIndex(index)}
-          ></span>
-        ))}
-      </div>
-    </div>
+    <RigidBody
+      ref={cardRef}
+      colliders="cuboid"
+      restitution={0.8}
+      friction={0.5}
+      linearDamping={0.5}
+      angularDamping={0.9}
+      position={position}
+    >
+      <mesh onClick={handleFlip} scale={[1.5, 2, 0.1]} castShadow>
+        <boxGeometry args={[1.5, 2, 0.1]} />
+        <meshStandardMaterial color={flipped ? "white" : "blue"} />
+      </mesh>
+    </RigidBody>
   );
 }
 
-export default Projects;
+export default function Projects() {
+  return (
+    <div id="projects" style={{ height: "100vh", width: "100vw" }}>
+      <Canvas shadows camera={{ position: [0, 3, 8], fov: 45 }} style={{ background: "#1e1e1e" }}>
+        <ambientLight intensity={0.5} />
+        <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
+
+        <Physics>
+          {/* Adding a ceiling from where cards will hang */}
+          <RigidBody type="fixed" position={[0, 3, 0]}>
+            <mesh>
+              <boxGeometry args={[10, 0.2, 10]} />
+              <meshStandardMaterial color="gray" />
+            </mesh>
+          </RigidBody>
+
+          {/* Add the strings using BallColliders */}
+          {projectData.map((project, index) => (
+            <RigidBody key={`collider-${index}`} type="fixed" position={[index * 2 - 2, 2.5, 0]}>
+              <BallCollider args={[0.05]} />
+            </RigidBody>
+          ))}
+
+          {/* Hanging Cards */}
+          {projectData.map((project, index) => (
+            <HangingCard key={project.id} position={[index * 2 - 2, 1, 0]} project={project} />
+          ))}
+        </Physics>
+      </Canvas>
+    </div>
+  );
+}
