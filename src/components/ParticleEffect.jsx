@@ -13,7 +13,7 @@ const ParticleEffect = () => {
             0.1,
             1000
         );
-        camera.position.z = 5;
+        camera.position.z = 8;
 
         // Renderer
         const renderer = new THREE.WebGLRenderer({ alpha: true });
@@ -21,9 +21,9 @@ const ParticleEffect = () => {
         mountRef.current.appendChild(renderer.domElement);
 
         // Responsive Particle Grid
-        const cols = Math.floor(window.innerWidth / 25); // Increase density
-        const rows = Math.floor(window.innerHeight / 25);
-        const spacing = 0.6; // Space between particles
+        const cols = Math.floor(window.innerWidth / 10); // Increase density
+        const rows = Math.floor(window.innerHeight / 10);
+        const spacing = 0.4; // Space between particles
         const particleCount = cols * rows;
 
         const particles = new THREE.BufferGeometry();
@@ -57,22 +57,28 @@ const ParticleEffect = () => {
                     vec3 newPosition = position;
 
                     // Wave moves diagonally, smoother fade across multiple rows
-                    float wave = sin(time * 0.5 + offset * 1.2) * 0.5 + 0.5;
+                    float wave = sin(time * 0.35 + offset * 0.2) * 0.3 + 0.1;
                     
                     // Gaussian-style wave spread to neighboring particles
-                    float spread = smoothstep(0.2, 0.8, wave) * 0.9;
+                    float spread = smoothstep(0.1, 0.6, wave) * 0.9;
 
-                    vOpacity = spread; // Smooth opacity transition
+                    // Adjust falloff to create a softer gradient between rows
+                    float falloff = mix(0.001, 0.9, spread); 
 
+                    vOpacity = falloff; // Smooth opacity transition
                     gl_PointSize = 5.0;
                     gl_Position = projectionMatrix * modelViewMatrix * vec4(newPosition, 1.0);
                 }
             `,
             fragmentShader: `
                 varying float vOpacity;
+                
                 void main() {
-                    gl_FragColor = vec4(1.0, 0.5, 0.8, vOpacity);
+                    float distance = length(gl_PointCoord - vec2(0.5)); // Creates a circular mask
+                    if (distance > 0.5) discard; // Removes the corners, making particles round
+                    gl_FragColor = vec4(1.0, 1.0, 1.0, vOpacity * (1.0 - distance * 2.0)); // Smooth fade edges
                 }
+
             `,
             uniforms: {
                 time: { value: 0 }

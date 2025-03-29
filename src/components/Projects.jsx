@@ -1,70 +1,63 @@
-import React, { useRef, useState } from "react";
-import { Canvas } from "@react-three/fiber";
-import { Physics, RigidBody, BallCollider } from "@react-three/rapier";
-// import { Html } from "@react-three/drei";
-import * as THREE from "three";
+import React from "react";
+import ProjectCard from "./ProjectCard.jsx";
+import "../styles/Projects.css";
 
 const projectData = [
-  { id: 1, title: "Project 1", description: "Description of Project 1" },
-  { id: 2, title: "Project 2", description: "Description of Project 2" },
-  { id: 3, title: "Project 3", description: "Description of Project 3" },
+  {
+    title: "React Weather API",
+    description: "View dynamic real-time data for specific areas based on user search.",
+    githubLink: "https://github.com/craiglawsonnn/weatherApp",
+    technologies: ["react", "api"],
+  },
+  {
+    title: "Rekoglock - PR300",
+    description: "Facial Recognition Security System using AWS Rekognition and Pi.",
+    githubLink: "https://github.com/craiglawsonnn/PRJ300",
+    technologies: ["python", "aws"],
+  },
+  {
+    title: "Foodseg103 - PR400",
+    description: "Moosic - Artist Discovery Website. My first web development project.",
+    githubLink: "https://github.com/craiglawsonnn/PRJ400",
+    technologies: ["react", "googlemaps"],
+  },
+  {
+    title: "Portfolio",
+    description: "You're looking at it.",
+    githubLink: "https://github.com/craiglawsonnn/weatherApp",
+    technologies: ["react", "threejs"],
+  },
+  {
+    title: "C# WBF - API",
+    description: "WPF Desktop App for activity management built in C#.",
+    githubLink: "https://github.com/craiglawsonnn/CA2",
+    technologies: ["csharp"],
+  },
+  {
+    title: "PowerBi",
+    description: "Work in progress. Watch this space...",
+    githubLink: "https://github.com/craiglawsonnn/weatherApp",
+    technologies: ["powerbi"],
+  },
 ];
 
-function HangingCard({ position, project }) {
-  const cardRef = useRef();
-  const [flipped, setFlipped] = useState(false);
-
-  const handleFlip = () => {
-    setFlipped(!flipped);
-  };
-
+function Projects() {
   return (
-    <RigidBody
-      ref={cardRef}
-      colliders="cuboid"
-      restitution={0.8}
-      friction={0.5}
-      linearDamping={0.5}
-      angularDamping={0.9}
-      position={position}
-    >
-      <mesh onClick={handleFlip} scale={[1.5, 2, 0.1]} castShadow>
-        <boxGeometry args={[1.5, 2, 0.1]} />
-        <meshStandardMaterial color={flipped ? "white" : "blue"} />
-      </mesh>
-    </RigidBody>
-  );
-}
-
-export default function Projects() {
-  return (
-    <div id="projects" style={{ height: "100vh", width: "100vw" }}>
-      <Canvas shadows camera={{ position: [0, 3, 8], fov: 45 }} style={{ background: "#1e1e1e" }}>
-        <ambientLight intensity={0.5} />
-        <directionalLight position={[5, 5, 5]} intensity={1} castShadow />
-
-        <Physics>
-          {/* Adding a ceiling from where cards will hang */}
-          <RigidBody type="fixed" position={[0, 3, 0]}>
-            <mesh>
-              <boxGeometry args={[10, 0.2, 10]} />
-              <meshStandardMaterial color="gray" />
-            </mesh>
-          </RigidBody>
-
-          {/* Add the strings using BallColliders */}
-          {projectData.map((project, index) => (
-            <RigidBody key={`collider-${index}`} type="fixed" position={[index * 2 - 2, 2.5, 0]}>
-              <BallCollider args={[0.05]} />
-            </RigidBody>
-          ))}
-
-          {/* Hanging Cards */}
-          {projectData.map((project, index) => (
-            <HangingCard key={project.id} position={[index * 2 - 2, 1, 0]} project={project} />
-          ))}
-        </Physics>
-      </Canvas>
+    <div className="projects-container">
+      <div className="projects-row">
+        {projectData.map((proj, index) => (
+          <ProjectCard
+            key={index}
+            title={proj.title}
+            description={proj.description}
+            githubLink={proj.githubLink}
+            technologies={proj.technologies}
+          />
+        ))}
+      </div>
     </div>
+
   );
 }
+
+export default Projects;

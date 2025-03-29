@@ -1,0 +1,267 @@
+.aboutme-card {
+  display: flex;
+  flex-direction: row;
+  background-color: #1e1e1e;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 40px auto;
+  max-width: 1000px;
+  color: white;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.05);
+}
+.project-title {
+  font-size: 2rem; /* larger */
+  font-weight: 800;
+  margin-bottom: 5px;
+  color: #f1f1f1;
+}
+
+.level-xp {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  color: #ccc;
+  font-weight: 500;
+}
+
+.model-column {
+  width: 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(
+    circle,
+    #cecece 40%,
+    #5f5f5f 100%
+  ); /* Vignette-style */
+  border-top-left-radius: 10px;
+  border-bottom-left-radius: 10px;
+}
+
+.model-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.reset-button {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background-color: #2d2d2d;
+  color: #fff;
+  border: none;
+  padding: 8px 10px;
+  font-size: 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  z-index: 10;
+  opacity: 0.8;
+  transition: background-color 0.3s ease;
+}
+
+.reset-button:hover {
+  background-color: #4a4a4a;
+  opacity: 1;
+}
+
+
+
+.model-column canvas {
+  width: 100%;
+  height: 100%;
+}
+
+.info-column {
+  width: 60%;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+}
+
+
+.character-name {
+  font-size: 2rem;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.character-details {
+  font-size: 0.95rem;
+  color: #ccc;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.tech-bars label {
+  font-size: 0.85rem;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.info-column {
+  width: 60%;
+  padding: 20px;
+  display: flex;
+  flex-direction: row; /* Split into two sections */
+  gap: 30px;
+}
+
+/* Left: Skills */
+.skills-section {
+  flex: 1;
+}
+
+/* Right: Bio */
+.bio-section {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bio-section .description {
+  width: 100%;
+  padding: 15px;
+  font-size: 0.95rem;
+  line-height: 1.6;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #ccc;
+}
+/* Keep these as-is or tweak for style */
+.tech-bars .bar {
+  margin-bottom: 10px;
+}
+
+.tech-bars label {
+  font-size: 0.8rem;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.bar-fill {
+  height: 10px;
+  background-color: gold;
+  border-radius: 4px;
+}
+
+.description {
+  background-color: rgba(255, 255, 255, 0.08);
+  padding: 15px;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  height: auto;
+}
+
+
+.bio-box {
+  margin-top: 20px;
+  padding: 12px 16px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Medium Screens (Tablets) */
+@media screen and (max-width: 1024px) {
+  .aboutme-card {
+    flex-direction: column;
+    max-width: 90%;
+  }
+
+  .model-column,
+  .info-column {
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .model-column {
+    border-bottom-left-radius: 0;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+  }
+
+  .model-wrapper {
+    height: 400px;
+  }
+
+  .info-column {
+    flex-direction: column;
+    padding: 20px 15px;
+    gap: 20px;
+  }
+
+  .project-title {
+    font-size: 1.8rem;
+    text-align: center;
+  }
+
+  .level-xp {
+    justify-content: center;
+    gap: 20px;
+  }
+
+  .bio-section {
+    flex: 1;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 0 0 0; /* Reset any left/right padding */
+  }
+  
+  .bio-section .description {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 15px;
+    margin: 0 auto;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    color: #ccc;
+  }
+  
+}
+
+
+/* Small Screens (Phones) */
+@media screen and (max-width: 600px) {
+  .model-wrapper {
+    height: 320px;
+  }
+
+  .project-title {
+    font-size: 1.5rem;
+  }
+
+  .level-xp {
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tech-bars label {
+    font-size: 0.75rem;
+  }
+
+  .bar-fill {
+    height: 8px;
+  }
+
+  .bio-section .description {
+    font-size: 0.85rem;
+    padding: 12px;
+    box-sizing: border-box; /* Ensures it doesn't overflow */
+  }
+
+  .reset-button {
+    bottom: 10px;
+    left: 10px;
+    padding: 6px 8px;
+    font-size: 0.9rem;
+  }
+}
