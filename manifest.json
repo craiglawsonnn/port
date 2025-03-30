@@ -1,0 +1,10 @@
+{
+    "short_name": "CraigPortfolio",
+    "name": "Craig Lawson Portfolio",
+    "icons": [],
+    "start_url": ".",
+    "display": "standalone",
+    "theme_color": "#1e1e1e",
+    "background_color": "#1e1e1e"
+  }
+  
