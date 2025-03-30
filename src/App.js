@@ -79,6 +79,7 @@ function App() {
     }
   }}
 />
+    <FloatingCVButton />
         <div id="app-container">
           <div id="home" className="section" ref={homeRef}>
             <Home />
