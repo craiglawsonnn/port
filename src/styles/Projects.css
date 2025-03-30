@@ -166,7 +166,14 @@
     gap: 8px;
     height: auto;
   }
-
+  .project-card.hovered {
+    width: 100% !important;
+    height: auto !important;
+    max-height: 90vh;
+    overflow-y: auto;
+    padding: 16px;
+  }
+  
   .project-card {
     height: 250px;
     width: 85vw;
