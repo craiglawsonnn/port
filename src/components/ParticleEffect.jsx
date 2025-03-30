@@ -107,9 +107,12 @@ const ParticleEffect = () => {
         window.addEventListener("resize", handleResize);
 
         return () => {
-            mountRef.current.removeChild(renderer.domElement);
+            if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
+              mountRef.current.removeChild(renderer.domElement);
+            }
             window.removeEventListener("resize", handleResize);
-        };
+          };
+          
     }, []);
 
     return <div ref={mountRef} style={{ position: "absolute", top: 0, left: 0, width: "100vw", height: "100vh" }} />;

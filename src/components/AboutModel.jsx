@@ -4,7 +4,8 @@ import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
 export default function AboutModel() {
-  const { scene: characterScene, animations } = useGLTF("/models/CraigWalk.glb");
+  const { scene: characterScene, animations } = useGLTF(process.env.PUBLIC_URL + "/models/CraigWalk.glb");
+
   const mixer = useRef(null);
   const clock = useRef(new THREE.Clock());
   const { camera } = useThree();
