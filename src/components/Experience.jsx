@@ -26,7 +26,7 @@ const experiences = [
     Date: "June 2018 - November 2024",
     location: "Sligo, Ireland",
     description:
-      "- Processing transactions, including handling payments, issuing receipts, and balancing the cash register at the endof the shift.\n- Assisting customers, with purchases, answering questions, and providing information about products andpromotions.",
+      "- Processing transactions, including handling payments, issuing receipts, and balancing the cash register at the end of the shift.\n- Assisting customers, with purchases, answering questions, and providing information about products and promotions.",
   },
   {
     title: "Retail Assistant & Manager",
