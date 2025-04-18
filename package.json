@@ -17,6 +17,7 @@
     "cra-template": "1.2.0",
     "framer-motion": "10.0.0",
     "gsap": "^3.12.7",
+    "lottie-react": "^2.4.1",
     "postcss": "^8.5.3",
     "postcss-loader": "^8.1.1",
     "postcss-normalize": "^13.0.1",
@@ -38,7 +39,6 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
-
   },
   "eslintConfig": {
     "extends": [

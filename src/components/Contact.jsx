@@ -14,10 +14,10 @@ function Contact() {
     setFeedback(null);
 
     emailjs.sendForm(
-      "service_vfu5cag",        // your service ID
-      "template_rijx6j7",       // your template ID
+      "service_vfu5cag",     
+      "template_rijx6j7",       
       formRef.current,
-      "FbQUc77lICfPaigWz"       // your public key
+      import.meta.env.VITE_EMAILJS_PUBLIC_KEY 
     )
     .then(
       () => {
