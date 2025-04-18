@@ -4,7 +4,7 @@ Welcome to my personal portfolio website – a creative, interactive, and fully 
 
 ##  Live Demo
 
->  Deployed locally (or hosted at: `https://yourportfolio.url` if hosted online)
+https://craiglawsonnn.github.io/port/
 
 ---
 
